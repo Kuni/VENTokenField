@@ -21,6 +21,7 @@
 // THE SOFTWARE.
 
 #import <UIKit/UIKit.h>
+#import "VENToken.h"
 
 @class VENTokenField;
 @protocol VENTokenFieldDelegate <NSObject>
@@ -29,6 +30,7 @@
 - (void)tokenField:(VENTokenField *)tokenField didDeleteTokenAtIndex:(NSUInteger)index;
 - (void)tokenField:(VENTokenField *)tokenField didChangeText:(NSString *)text;
 - (void)tokenFieldDidBeginEditing:(VENTokenField *)tokenField;
+- (void)tokenField:(VENTokenField *)tokenField didSelectedTokenAtIndex:(NSUInteger)index;
 @end
 
 @protocol VENTokenFieldDataSource <NSObject>
@@ -37,6 +39,7 @@
 - (NSUInteger)numberOfTokensInTokenField:(VENTokenField *)tokenField;
 - (NSString *)tokenFieldCollapsedText:(VENTokenField *)tokenField;
 - (UIColor *)tokenField:(VENTokenField *)tokenField colorSchemeForTokenAtIndex:(NSUInteger)index;
+- (VENTokenSecureType)tokenField:(VENTokenField*)tokenField secureTypeForTokenAtIndex:(NSUInteger)index;
 @end
 
 
@@ -77,7 +80,16 @@
 @property (copy, nonatomic) NSString *placeholderText;
 @property (copy, nonatomic) NSString *inputTextFieldAccessibilityLabel;
 
+// Secure Type Extension
+@property(nonatomic, strong) UIImage *lockImg;
+@property(nonatomic, strong) UIImage *unlockImg;
+@property(nonatomic, strong) UIImage *certificatedImg;
+@property(nonatomic, strong) UIImage *certificateNotVerifiedImg;
+
 - (void)setColorScheme:(UIColor *)color;
+
+
+
 
 @end
 

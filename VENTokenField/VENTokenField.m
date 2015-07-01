@@ -298,14 +298,20 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     for (NSUInteger i = 0; i < [self numberOfTokens]; i++) {
         NSString *title = [self titleForTokenAtIndex:i];
         VENToken *token = [[VENToken alloc] init];
+        token.lockImg = self.lockImg;
+        token.unlockImg = self.unlockImg;
+        token.certificatedImg = self.certificatedImg;
+        token.certificateNotVerifiedImg = self.certificateNotVerifiedImg;
 
+        token.secureType = [self secureTypeForTokenAtIndex:i];
+        
         __weak VENToken *weakToken = token;
         __weak VENTokenField *weakSelf = self;
         token.didTapTokenBlock = ^{
             [weakSelf didTapToken:weakToken];
         };
 
-        [token setTitleText:[NSString stringWithFormat:@"%@,", title]];
+        [token setTitleText:[NSString stringWithFormat:@"%@", title]];
         token.colorScheme = [self colorSchemeForTokenAtIndex:i];
         
         [self.tokens addObject:token];
@@ -448,14 +454,25 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
 - (void)didTapToken:(VENToken *)token
 {
+    NSInteger index = 0;
+    NSInteger target = 0;
     for (VENToken *aToken in self.tokens) {
         if (aToken == token) {
             aToken.highlighted = !aToken.highlighted;
+            target = index;
         } else {
             aToken.highlighted = NO;
         }
+        index++;
     }
     [self setCursorVisibility];
+    
+    
+    if(self.delegate && [self.delegate respondsToSelector:@selector(tokenField:didSelectedTokenAtIndex:)])
+    {
+        [self.delegate tokenField:self didSelectedTokenAtIndex:target];
+    }
+    
 }
 
 - (void)unhighlightAllTokens
@@ -513,6 +530,17 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     }
     
     return [NSString string];
+}
+
+-(VENTokenSecureType)secureTypeForTokenAtIndex:(NSUInteger)index
+{
+    if([self.dataSource respondsToSelector:@selector(tokenField:secureTypeForTokenAtIndex:)])
+    {
+        return [self.dataSource tokenField:self secureTypeForTokenAtIndex:index];
+    }
+    
+    return VENTokenSecureTypeNormal;
+    
 }
 
 - (NSUInteger)numberOfTokens

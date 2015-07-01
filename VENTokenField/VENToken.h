@@ -22,11 +22,26 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger, VENTokenSecureType)
+{
+    VENTokenSecureTypeNormal,
+    VENTokenSecureTypeLock,
+    VENTokenSecureTypeUnlock,
+    VENTokenSecureTypeCertificateVerified,
+    VENTokenSecureTypeCertificateNotVerified
+};
+
+
 @interface VENToken : UIView
 
 @property (assign, nonatomic) BOOL highlighted;
 @property (copy, nonatomic) void (^didTapTokenBlock) (void);
 @property (strong, nonatomic) UIColor *colorScheme;
+@property (nonatomic, assign) VENTokenSecureType    secureType;
+@property (nonatomic, strong) UIImage               *lockImg;
+@property (nonatomic, strong) UIImage               *unlockImg;
+@property (nonatomic, strong) UIImage               *certificatedImg;
+@property (nonatomic, strong) UIImage               *certificateNotVerifiedImg;
 
 - (void)setTitleText:(NSString *)text;
 

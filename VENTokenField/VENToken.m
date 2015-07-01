@@ -26,6 +26,7 @@
 @property (strong, nonatomic) UITapGestureRecognizer *tapGestureRecognizer;
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UIView *backgroundView;
+@property (weak, nonatomic) IBOutlet UIImageView    *imageView;
 @end
 
 @implementation VENToken
@@ -46,6 +47,7 @@
     self.colorScheme = [UIColor blueColor];
     self.titleLabel.textColor = self.colorScheme;
     [self addGestureRecognizer:self.tapGestureRecognizer];
+
 }
 
 - (void)setTitleText:(NSString *)text
@@ -53,7 +55,14 @@
     self.titleLabel.text = text;
     self.titleLabel.textColor = self.colorScheme;
     [self.titleLabel sizeToFit];
-    self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetMaxX(self.titleLabel.frame) + 3, CGRectGetHeight(self.frame));
+    
+    CGFloat imgWidth = CGRectGetWidth(self.imageView.frame);
+    if(self.imageView.image == nil)
+    {
+        imgWidth = 0;
+    }
+    
+    self.frame = CGRectMake(CGRectGetMinX(self.frame), CGRectGetMinY(self.frame), CGRectGetMaxX(self.titleLabel.frame) + imgWidth + 8 , CGRectGetHeight(self.frame));
     [self.titleLabel sizeToFit];
 }
 
@@ -71,6 +80,32 @@
     _colorScheme = colorScheme;
     self.titleLabel.textColor = self.colorScheme;
     [self setHighlighted:_highlighted];
+}
+
+
+-(void)setSecureType:(VENTokenSecureType)secureType
+{
+    switch (secureType) {
+        case VENTokenSecureTypeLock:
+            self.imageView.image = self.lockImg;
+            break;
+        case VENTokenSecureTypeUnlock:
+            self.imageView.image = self.unlockImg;
+            break;
+        case VENTokenSecureTypeCertificateVerified:
+            self.imageView.image = self.certificatedImg;
+            break;
+            
+        case VENTokenSecureTypeCertificateNotVerified:
+            self.imageView.image = self.certificateNotVerifiedImg;
+            break;
+            
+        default:
+            //self.imageView.image = nil;
+            break;
+    }
+    
+
 }
 
 
