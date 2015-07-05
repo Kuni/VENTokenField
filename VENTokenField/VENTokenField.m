@@ -639,4 +639,10 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     }
 }
 
+-(void)setLineColor:(UIColor *)lineColor
+{
+    _lineColor = lineColor;
+    self.lineView.backgroundColor = lineColor;
+}
+
 @end

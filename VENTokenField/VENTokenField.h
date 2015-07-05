@@ -85,6 +85,8 @@
 @property(nonatomic, strong) UIImage *unlockImg;
 @property(nonatomic, strong) UIImage *certificatedImg;
 @property(nonatomic, strong) UIImage *certificateNotVerifiedImg;
+@property(nonatomic, strong) UIColor *lineColor;
+
 
 - (void)setColorScheme:(UIColor *)color;
 
