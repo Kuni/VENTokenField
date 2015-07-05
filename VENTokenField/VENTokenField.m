@@ -44,6 +44,8 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 @property (strong, nonatomic) VENBackspaceTextField *inputTextField;
 @property (strong, nonatomic) UIColor *colorScheme;
 @property (strong, nonatomic) UILabel *collapsedLabel;
+@property (weak, nonatomic) UIView    *lineView;
+
 
 @end
 
@@ -180,6 +182,12 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     } else {
         [self layoutTokensAndInputWithFrameAdjustment:NO];
     }
+    
+    self.lineView.frame = CGRectMake(0, 0, CGRectGetWidth(self.frame), 1);
+    CGPoint center = self.lineView.center;
+    center.y = CGRectGetHeight(self.frame) - 0.5;
+    self.lineView.center = center;
+    
 }
 
 - (void)layoutCollapsedLabel
@@ -246,6 +254,14 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     self.scrollView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
 
     [self addSubview:self.scrollView];
+    
+    
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self addSubview:lineView];
+    self.lineView = lineView;
+    self.lineView.backgroundColor = [UIColor grayColor];
+    
+    
 }
 
 - (void)layoutInputTextFieldWithCurrentX:(CGFloat *)currentX currentY:(CGFloat *)currentY
