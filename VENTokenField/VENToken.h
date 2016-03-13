@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, VENTokenSecureType)
     VENTokenSecureTypeCertificateNotVerified
 };
 
+NS_ASSUME_NONNULL_BEGIN
 
 @interface VENToken : UIView
 
