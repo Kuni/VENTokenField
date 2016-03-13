@@ -220,7 +220,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
     [self layoutToLabelInView:self.scrollView origin:CGPointZero currentX:&currentX];
     [self layoutTokensWithCurrentX:&currentX currentY:&currentY];
-    [self layoutInputTextFieldWithCurrentX:&currentX currentY:&currentY];
+    [self layoutInputTextFieldWithCurrentX:&currentX currentY:&currentY clearInput:shouldAdjustFrame];
 
     if (shouldAdjustFrame) {
         [self adjustHeightForCurrentY:currentY];
@@ -264,7 +264,7 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     
 }
 
-- (void)layoutInputTextFieldWithCurrentX:(CGFloat *)currentX currentY:(CGFloat *)currentY
+- (void)layoutInputTextFieldWithCurrentX:(CGFloat *)currentX currentY:(CGFloat *)currentY clearInput:(BOOL)clearInput
 {
     CGFloat inputTextFieldWidth = self.scrollView.contentSize.width - *currentX;
     if (inputTextFieldWidth < self.minInputWidth) {
@@ -274,7 +274,9 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
     }
 
     VENBackspaceTextField *inputTextField = self.inputTextField;
-    inputTextField.text = @"";
+    if (clearInput) {
+        inputTextField.text = @"";
+    }
     inputTextField.frame = CGRectMake(*currentX, *currentY + 1, inputTextFieldWidth, [self heightForToken] - 1);
     inputTextField.tintColor = self.colorScheme;
     [self.scrollView addSubview:inputTextField];
@@ -395,17 +397,25 @@ static const CGFloat VENTokenFieldDefaultMaxHeight          = 150.0;
 
 - (void)adjustHeightForCurrentY:(CGFloat)currentY
 {
+    CGFloat oldHeight = self.height;
+    CGFloat height;
     if (currentY + [self heightForToken] > CGRectGetHeight(self.frame)) { // needs to grow
         if (currentY + [self heightForToken] <= self.maxHeight) {
-            [self setHeight:currentY + [self heightForToken] + self.verticalInset * 2];
+            height = currentY + [self heightForToken] + self.verticalInset * 2;
         } else {
-            [self setHeight:self.maxHeight];
+            height = self.maxHeight;
         }
     } else { // needs to shrink
         if (currentY + [self heightForToken] > self.originalHeight) {
-            [self setHeight:currentY + [self heightForToken] + self.verticalInset * 2];
+            height = currentY + [self heightForToken] + self.verticalInset * 2;
         } else {
-            [self setHeight:self.originalHeight];
+            height = self.originalHeight;
+        }
+    }
+    if (oldHeight != height) {
+        [self setHeight:height];
+        if ([self.delegate respondsToSelector:@selector(tokenField:didChangeContentHeight:)]) {
+            [self.delegate tokenField:self didChangeContentHeight:height];
         }
     }
 }

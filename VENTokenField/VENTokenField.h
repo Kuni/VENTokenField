@@ -23,14 +23,17 @@
 #import <UIKit/UIKit.h>
 #import "VENToken.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class VENTokenField;
 @protocol VENTokenFieldDelegate <NSObject>
 @optional
 - (void)tokenField:(VENTokenField *)tokenField didEnterText:(NSString *)text;
 - (void)tokenField:(VENTokenField *)tokenField didDeleteTokenAtIndex:(NSUInteger)index;
-- (void)tokenField:(VENTokenField *)tokenField didChangeText:(NSString *)text;
+- (void)tokenField:(VENTokenField *)tokenField didChangeText:(nullable NSString *)text;
 - (void)tokenFieldDidBeginEditing:(VENTokenField *)tokenField;
 - (void)tokenField:(VENTokenField *)tokenField didSelectedTokenAtIndex:(NSUInteger)index;
+- (void)tokenField:(VENTokenField *)tokenField didChangeContentHeight:(CGFloat)height;
 @end
 
 @protocol VENTokenFieldDataSource <NSObject>
@@ -50,7 +53,7 @@
 
 - (void)reloadData;
 - (void)collapse;
-- (NSString *)inputText;
+- (nullable NSString *)inputText;
 
 
 /**-----------------------------------------------------------------------------
@@ -69,16 +72,16 @@
 
 @property (assign, nonatomic) UITextAutocorrectionType autocorrectionType;
 @property (assign, nonatomic) UITextAutocapitalizationType autocapitalizationType;
-@property (assign, nonatomic) UIView *inputTextFieldAccessoryView;
+@property (assign, nonatomic, nullable) UIView *inputTextFieldAccessoryView;
 @property (strong, nonatomic) UIColor *toLabelTextColor;
-@property (strong, nonatomic) NSString *toLabelText;
+@property (strong, nonatomic, nullable) NSString *toLabelText;
 @property (strong, nonatomic) UIColor *inputTextFieldTextColor;
 
 @property (strong, nonatomic) UILabel *toLabel;
 
-@property (strong, nonatomic) NSArray *delimiters;
-@property (copy, nonatomic) NSString *placeholderText;
-@property (copy, nonatomic) NSString *inputTextFieldAccessibilityLabel;
+@property (strong, nonatomic, nullable) NSArray *delimiters;
+@property (copy, nonatomic, nullable) NSString *placeholderText;
+@property (copy, nonatomic, nullable) NSString *inputTextFieldAccessibilityLabel;
 
 // Secure Type Extension
 @property(nonatomic, strong) UIImage *lockImg;
@@ -95,3 +98,4 @@
 
 @end
 
+NS_ASSUME_NONNULL_END
